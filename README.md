@@ -13,4 +13,4 @@
 
 # Stats
 
-Used time: 50min
+Time used: 50min
