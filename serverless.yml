@@ -1,0 +1,38 @@
+
+service:
+  name: authorization-test
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage, 'local'}
+
+plugins:
+  - serverless-offline
+
+functions:  
+  
+  accessAuthorizer: 
+    handler: functions/accessManager.handler
+    
+  login:
+    handler: functions/login.handler
+    events:
+      - http:
+          path: /login
+          method: POST
+          cors: true
+
+  privateApi:
+    handler: functions/privateApi.handler
+    events:
+      - http:
+          path: /private-route
+          method: GET
+          cors: true
+          authorizer: ${self:custom.authorizerSettings}
+
+custom:
+  authorizerSettings:
+    type: request
+    name: accessAuthorizer
